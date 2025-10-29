@@ -1,0 +1,17 @@
+enable: true
+analyzers:
+  - flake8
+  - pylint
+  - bandit
+  - radon
+  - python-ast
+severity_threshold: info
+exclude:
+  - .git
+  - .venv
+  - node_modules
+  - dist
+  - build
+python:
+  max_function_lines: 60
+  max_nesting_depth: 3

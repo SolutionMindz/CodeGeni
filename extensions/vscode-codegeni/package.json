@@ -1,0 +1,74 @@
+{
+  "name": "codegeni",
+  "displayName": "CodeGeni - AI Code Review",
+  "description": "AI-assisted code review: unified diagnostics, inline suggestions, and summary panel.",
+  "version": "0.0.1",
+  "publisher": "SolutionMind",
+  "icon": "icon.png",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Linters"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "codegeni",
+          "title": "CodeGeni",
+          "icon": "codegeni-activity-icon.png"
+        }
+      ]
+    },
+    "views": {
+      "codegeni": [
+        {
+          "id": "codegeniExplorer",
+          "name": "Code Review"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "codegeni.scanWorkspace",
+        "title": "CodeGeni: Scan Workspace",
+        "icon": "$(play)"
+      },
+      {
+        "command": "codegeni.refreshView",
+        "title": "CodeGeni: Refresh",
+        "icon": "$(refresh)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "codegeni.scanWorkspace",
+          "when": "view == codegeniExplorer",
+          "group": "navigation"
+        },
+        {
+          "command": "codegeni.refreshView",
+          "when": "view == codegeniExplorer",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^24.9.2",
+    "@types/vscode": "^1.90.0",
+    "typescript": "^5.4.0",
+    "vsce": "^2.15.0"
+  }
+}

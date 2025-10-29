@@ -1,0 +1,10 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <!-- CodeGeni Activity Bar Icon - Simplified Genie -->
+  <g fill="currentColor" opacity="1">
+    <!-- Genie body shape -->
+    <path d="M16 4 C12 4 10 6 10 10 C10 14 12 16 12 20 C12 24 10 28 16 28 C22 28 20 24 20 20 C20 16 22 14 22 10 C22 6 20 4 16 4 Z" />
+    <!-- Code brackets -->
+    <path d="M6 10 L8 10 L7 13 L8 16 L6 16" stroke="currentColor" fill="none" stroke-width="1.5"/>
+    <path d="M26 10 L24 10 L25 13 L24 16 L26 16" stroke="currentColor" fill="none" stroke-width="1.5"/>
+  </g>
+</svg>
