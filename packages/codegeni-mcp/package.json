@@ -1,0 +1,29 @@
+{
+  "name": "@codegeni/mcp",
+  "version": "0.1.0",
+  "description": "HTTP bridge that exposes CodeGeni tools via a lightweight MCP-compatible interface",
+  "type": "module",
+  "main": "dist/server.js",
+  "types": "dist/server.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/server.d.ts",
+      "default": "./dist/server.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "rm -rf dist",
+    "dev": "bun run --watch src/server.ts"
+  },
+  "dependencies": {
+    "@codegeni/tools": "workspace:*",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.8"
+  }
+}

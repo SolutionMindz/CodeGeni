@@ -1,0 +1,20 @@
+{
+  "name": "@codegeni/langgraph",
+  "version": "0.1.0",
+  "description": "Finite-state workflow orchestration for the CodeGeni agent stack",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@codegeni/tools": "workspace:*",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.8"
+  }
+}

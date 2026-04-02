@@ -1,0 +1,35 @@
+{
+  "model": "anthropic/claude-3-5-sonnet",
+  "mcp": {
+    "codegeni-tools": {
+      "type": "http",
+      "url": "http://localhost:4097"
+    }
+  },
+  "brain": {
+    "url": "http://localhost:4100/tasks",
+    "workflow": "codegeni-langgraph"
+  },
+  "agents": {
+    "builder": {
+      "model": "anthropic/claude-3-5-sonnet",
+      "tools": [
+        "read_file",
+        "write_file",
+        "index_workspace",
+        "search_codebase",
+        "find_symbol",
+        "codegeni_scan",
+        "test_runner",
+        "docker_exec",
+        "git_status",
+        "git_diff",
+        "git_commit"
+      ]
+    },
+    "reviewer": {
+      "model": "anthropic/claude-3-5-sonnet",
+      "tools": ["read_file", "codegeni_scan", "git_diff"]
+    }
+  }
+}

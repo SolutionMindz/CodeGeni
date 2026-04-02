@@ -1,0 +1,32 @@
+{
+  "name": "@codegeni/tools",
+  "version": "0.1.0",
+  "description": "Core tool layer for the CodeGeni agent stack",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "rm -rf dist",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@codegeni/intelligence": "workspace:*",
+    "@codegeni/memory": "workspace:*",
+    "@codegeni/sandbox": "workspace:*",
+    "fast-glob": "^3.3.2",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.8"
+  }
+}

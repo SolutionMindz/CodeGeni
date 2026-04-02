@@ -1,0 +1,27 @@
+{
+  "name": "codegeni-monorepo",
+  "private": true,
+  "type": "module",
+  "packageManager": "bun@1.1.6",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "bun run build:tools && bun run build:memory && bun run build:intelligence && bun run build:langgraph && bun run build:sandbox && bun run build:brain && bun run build:mcp",
+    "build:tools": "cd packages/codegeni-tools && bun run build",
+    "build:memory": "cd packages/codegeni-memory && bun run build",
+    "build:intelligence": "cd packages/codegeni-intelligence && bun run build",
+    "build:langgraph": "cd packages/codegeni-langgraph && bun run build",
+    "build:sandbox": "cd packages/codegeni-sandbox && bun run build",
+    "build:brain": "cd packages/codegeni-brain && bun run build",
+    "build:mcp": "cd packages/codegeni-mcp && bun run build",
+    "lint": "bun run --filter ./packages/**/* lint",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.54.2",
+    "bun-types": "^1.0.11",
+    "typescript": "^5.5.4"
+  }
+}

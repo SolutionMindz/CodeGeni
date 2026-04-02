@@ -1,0 +1,28 @@
+{
+  "name": "@codegeni/intelligence",
+  "version": "0.1.0",
+  "description": "AST-aware chunking and symbol search utilities for CodeGeni",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "tree-sitter": "^0.22.1",
+    "tree-sitter-javascript": "^0.21.1",
+    "tree-sitter-python": "^0.21.0",
+    "tree-sitter-typescript": "^0.21.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.8"
+  }
+}

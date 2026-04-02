@@ -1,0 +1,26 @@
+{
+  "name": "@codegeni/sandbox",
+  "version": "0.1.0",
+  "description": "Docker-based sandbox runner for CodeGeni tooling",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "dockerode": "^4.0.2"
+  },
+  "devDependencies": {
+    "@types/dockerode": "^3.3.25",
+    "@types/node": "^20.12.8"
+  }
+}

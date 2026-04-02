@@ -9,10 +9,16 @@
     "vscode": "^1.90.0"
   },
   "categories": [
-    "Linters"
+    "Linters",
+    "AI"
   ],
   "activationEvents": [
-    "onStartupFinished"
+    "onStartupFinished",
+    "onView:codegeniChat",
+    "onCommand:codegeni.chat.open",
+    "onCommand:codegeni.chat.send",
+    "onCommand:codegeni.chat.cancel",
+    "onCommand:codegeni.chat.logout"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -28,46 +34,95 @@
     "views": {
       "codegeni": [
         {
-          "id": "codegeniExplorer",
-          "name": "Code Review"
+          "id": "codegeniChat",
+          "name": "CodeGeni Chat"
         }
       ]
     },
     "commands": [
       {
-        "command": "codegeni.scanWorkspace",
-        "title": "CodeGeni: Scan Workspace",
-        "icon": "$(play)"
+        "command": "codegeni.chat.open",
+        "title": "CodeGeni: Open Chat",
+        "icon": "$(comments)"
       },
       {
-        "command": "codegeni.refreshView",
-        "title": "CodeGeni: Refresh",
-        "icon": "$(refresh)"
+        "command": "codegeni.chat.send",
+        "title": "CodeGeni: Send Chat Message",
+        "icon": "$(comment-discussion)"
+      },
+      {
+        "command": "codegeni.chat.cancel",
+        "title": "CodeGeni: Cancel Run",
+        "icon": "$(debug-stop)"
+      },
+      {
+        "command": "codegeni.chat.logout",
+        "title": "CodeGeni: Clear Stored API Key",
+        "icon": "$(key)"
       }
     ],
     "menus": {
       "view/title": [
         {
-          "command": "codegeni.scanWorkspace",
-          "when": "view == codegeniExplorer",
+          "command": "codegeni.chat.send",
+          "when": "view == codegeniChat",
           "group": "navigation"
         },
         {
-          "command": "codegeni.refreshView",
-          "when": "view == codegeniExplorer",
+          "command": "codegeni.chat.cancel",
+          "when": "view == codegeniChat",
           "group": "navigation"
         }
       ]
+    },
+    "configuration": {
+      "title": "CodeGeni",
+      "properties": {
+        "codegeni.brainUrl": {
+          "type": "string",
+          "default": "http://localhost:4100",
+          "description": "Base URL for the local CodeGeni brain service."
+        },
+        "codegeni.mcpUrl": {
+          "type": "string",
+          "default": "http://localhost:4097",
+          "description": "Base URL for the CodeGeni MCP HTTP server."
+        },
+        "codegeni.chat.mode": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "manual"
+          ],
+          "default": "auto",
+          "description": "Execution mode for plan steps. Manual mode requires user approval before running tools."
+        },
+        "codegeni.chat.streamPollingInterval": {
+          "type": "number",
+          "default": 250,
+          "description": "Polling fallback interval (ms) when streaming is not available."
+        }
+      }
     }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./"
+    "watch": "tsc -watch -p ./",
+    "test": "npm run compile && node ./dist/test/runTest.js"
+  },
+  "dependencies": {
+    "uuid": "^11.0.2"
   },
   "devDependencies": {
     "@types/node": "^24.9.2",
     "@types/vscode": "^1.90.0",
+    "@types/uuid": "^10.0.0",
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.6",
+    "@vscode/test-electron": "^2.4.1",
+    "glob": "^11.0.0",
+    "mocha": "^10.7.3",
     "typescript": "^5.4.0",
     "vsce": "^2.15.0"
   }

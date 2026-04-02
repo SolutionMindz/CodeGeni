@@ -104,6 +104,100 @@ Then press F5 in VS Code to launch the extension host. Use the command palette a
 - Use exit code `0` for success, `1` for internal failure.
 - Non-empty diagnostics are not an error condition.
 
+## CodeGeni Agent Stack (TypeScript/Bun)
+
+The repository now includes a Bun-based monorepo that implements the multi-layer plan from `Docs/first_plan.md`. It lives under `packages/` and introduces the following packages:
+
+| Package | Description |
+| --- | --- |
+| `@codegeni/tools` | Tool layer (filesystem, git, exec, diagnostics, sandbox, memory adapters) |
+| `@codegeni/memory` | Chroma-backed vector store with local embeddings and workspace indexer |
+| `@codegeni/intelligence` | Tree-sitter powered chunker + symbol search utilities |
+| `@codegeni/langgraph` | LangGraph-inspired FSM that orchestrates planning → memory → execution |
+| `@codegeni/brain` | HTTP reasoning brain that exposes the LangGraph workflow as a service |
+| `@codegeni/sandbox` | Docker sandbox runner used by the exec/test tools |
+| `@codegeni/mcp` | Lightweight HTTP MCP server exposing every tool to the reasoning brain |
+
+### Install dependencies
+
+```bash
+# Requires Bun (https://bun.sh)
+bun install
+```
+
+### Build all packages
+
+```bash
+bun run build
+```
+
+### Run the MCP tool server
+
+```bash
+CHROMADB_URL=http://localhost:8000 \
+CODEGENI_WORKSPACE=$PWD \
+bun run --cwd packages/codegeni-mcp dev
+```
+
+### Optional: bring up the full stack with Docker Compose
+
+```bash
+docker compose up
+```
+
+This starts `chromadb` and the `codegeni-mcp` server inside a Bun container using the settings from `docker-compose.yml`.
+
+### Run the CodeGeni Brain (LangGraph layer)
+
+The reasoning layer lives in `packages/codegeni-brain` and composes the LangGraph workflow with the MCP tool registry. It exposes a lightweight HTTP API at `/tasks`.
+
+```bash
+CODEGENI_WORKSPACE=$PWD \
+CODEGENI_BRAIN_PORT=4100 \
+bun run --cwd packages/codegeni-brain dev
+```
+
+Send a task:
+
+```bash
+curl -X POST http://localhost:4100/tasks \
+  -H 'content-type: application/json' \
+  -d '{ "goal": "analyze test failures", "workspaceRoot": "'$PWD'" }'
+```
+
+The response includes the synthesized plan, LangGraph events (Plan → Memory → Code Intelligence → Tool → Sandbox), and any artifacts captured from tool executions.
+
+### Agent configuration
+
+Use `codegeni.agent.json` as a template for wiring the MCP server and the new brain service into your preferred front-end (TUI, desktop, or VS Code extension). The file now includes:
+
+- `brain.url` – HTTP endpoint for the LangGraph workflow (`packages/codegeni-brain`)
+- `brain.workflow` – Identifier for telemetry/logging (`codegeni-langgraph`)
+- `agents.*` – Builder/reviewer personas with explicit tool lists
+
+Point your UI at the MCP server for tool execution and at the brain endpoint for higher-level orchestration.
+
+### Sandbox image
+
+`Dockerfile.sandbox` defines the locked-down execution environment used by the `docker_exec` and `test_runner` tools. Build it locally and tag it as `codegeni-sandbox:latest`:
+
+```bash
+docker build -t codegeni-sandbox:latest -f Dockerfile.sandbox .
+```
+
+## Playwright Contract Tests
+
+The repository includes Playwright API tests for the planned MCP HTTP surface. These are intended to run in parallel with implementation work and serve as an executable contract for the first tool layer.
+
+Install JavaScript dependencies and run the suite against a live server:
+
+```bash
+bun install
+CODEGENI_E2E_BASE_URL=http://127.0.0.1:4097 bun run test:e2e
+```
+
+The suite currently covers live MCP envelope endpoints, request validation, and a set of future file-tool behaviors marked as `fixme` until the implementations land.
+
 ## Brand Assets
 
 Official CodeGeni logos and brand assets are available in the [`assets/`](assets/) directory:

@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+  chromadb:
+    image: ghcr.io/chroma-core/chroma:latest
+    ports:
+      - "8000:8000"
+    environment:
+      - IS_PERSISTENT=TRUE
+    volumes:
+      - chroma-data:/chroma/.chroma
+
+  codegeni-mcp:
+    image: oven/bun:latest
+    working_dir: /workspace
+    command: ["bun", "run", "--cwd", "packages/codegeni-mcp", "dev"]
+    environment:
+      - CHROMADB_URL=http://chromadb:8000
+      - CODEGENI_WORKSPACE=/workspace
+    volumes:
+      - .:/workspace
+    depends_on:
+      - chromadb
+    ports:
+      - "4097:4097"
+
+  codegeni-brain:
+    image: oven/bun:latest
+    working_dir: /workspace
+    command: ["bun", "run", "--cwd", "packages/codegeni-brain", "dev"]
+    environment:
+      - CODEGENI_WORKSPACE=/workspace
+      - CODEGENI_BRAIN_PORT=4100
+      - CHROMADB_URL=http://chromadb:8000
+    volumes:
+      - .:/workspace
+    depends_on:
+      - codegeni-mcp
+      - chromadb
+    ports:
+      - "4100:4100"
+
+volumes:
+  chroma-data:
